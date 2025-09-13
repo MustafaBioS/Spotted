@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flashCon">
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="center">
+        <div class="bg signbg container-fluid">
+            <h1 class="bgtitle">Sign Up</h1>
+            <form class="bgform" action="{{ url_for('signup') }}" method="post">
+                <input class="bguser bginp form-control" placeholder="Username" type="text" name="username" required>
+                <input class="bgpass bginp form-control" placeholder="Password" type="password" name="password" required>
+                <input class="bgsubmit btn form-control" value="Sign Up" type="submit">
+                <label for="checkbox" class="labelcheckbox form-control" style="background-color: black; border: none;">
+                    Artist Account?
+                    <input id="checkbox" class="checkbox form-control" type="checkbox" placeholder="Artist Account?" name="checkbox" value="1"> 
+                    <span class="fakecheckbox"></span>
+                </label>
+            </form>
+
+
+
+            <div class="spndiv">
+                <span class='spn'>Already Got An Account? 
+                    <a class="anchor" href="{{ url_for('login') }}">Login</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

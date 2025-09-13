@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+    
+</head>
+<body style="overflow-x: hidden;">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flashCon">
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <nav class="nvb navbar navbar-expand-lg navbar-toggler navbar-dark">
+        <div class="container-fluid">
+            {% if current_user.is_artist %}
+                <button class="navbar-toggler" type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#navbarContent" 
+                    aria-controls="navbarContent" 
+                    aria-expanded="false" 
+                    aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            
+        <div class=" nvb navbar navbar-expand-md container-fluid collapse navbar-collapse" id="navbarContent">
+            <div class="leftnvb">
+                <button class="upload navbar-brand">Upload Song</button>
+            </div>
+
+            <div class="middlenvb">
+                <img src="../static/home--v3.png" class="homeicon">
+                <input class="searchbar" type="search" name="search" placeholder="Search">
+            </div>
+
+            <div class="rightnvb">
+                <img src="/{{ current_user.pfp }}" class="pfp" alt="Profile Picture">
+            </div>
+            {% endif %}
+            </div>
+        </div>
+    </nav>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="resizer"></div>
+        <h1 class="library">Your Library</h1>
+        <button class="createplaylist">Create Playlist</button>
+    </aside>
+
+
+    <div class="gridCon row">
+        <div class="grid-item g2 col-12 col-md-3 col-lg-3 m-5" data-genre="Pop"><h1 class="gtitle">Pop</h1></div>
+        <div class="grid-item g3 col-12 col-md-3 col-lg-3 m-5" data-genre="Hip Hop"><h1 class="gtitle">Hip Hop</h1></div>
+        <div class="grid-item g4 col-12 col-md-3 col-lg-3 m-5" data-genre="Jazz"><h1 class="gtitle">Jazz</h1></div>
+        <div class="grid-item g5 col-12 col-md-3 col-lg-3 m-5" data-genre="Classical"><h1 class="gtitle">Classical</h1></div>
+        <div class="grid-item g6 col-12 col-md-3 col-lg-3 m-5" data-genre="Metal"><h1 class="gtitle">Metal</h1></div>
+        <div class="grid-item g1 col-12 col-md-3 col-lg-3 m-5" data-genre="Rock"><h1 class="gtitle">Rock</h1></div>
+        <div class="grid-item g7 col-12 col-md-3 col-lg-3 m-5" data-genre="Country"><h1 class="gtitle">Country</h1></div>
+        <div class="grid-item g8 col-12 col-md-3 col-lg-3 m-5" data-genre="Other"><h1 class="gtitle">Explore More</h1></div>
+    </div>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script>
+        const uploadbtn = document.querySelector('.upload')
+        const sidebar = document.querySelector('.sidebar')
+        const resizer = document.querySelector('.resizer')
+        const genrebox = document.querySelectorAll('.grid-item')
+        const home = document.querySelector('.homeicon');
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        home.addEventListener('click', ()=> {
+            window.location.href = "{{ url_for('home') }}"
+        })
+
+        document.addEventListener("touchstart", function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+        }, false);
+
+        document.addEventListener("touchend", function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+        }, false);
+
+        function handleSwipe() {
+        const sidebar = document.querySelector(".sidebar");
+
+        if (touchEndX > touchStartX + 50) {
+            sidebar.classList.add("active");
+        }
+
+        if (touchEndX < touchStartX - 50) {
+            sidebar.classList.remove("active");
+        }
+        }
+
+
+        genrebox.forEach(box => {
+            box.addEventListener('click', ()=> {
+                const genre = box.dataset.genre;
+                window.location.href = `/genre/${genre}`;
+            })
+        })
+
+        resizer.addEventListener('mousedown', function () {
+            document.addEventListener('mousemove', resize);
+            document.addEventListener('mouseup', stopResize);
+        })
+
+        function resize(e) {
+            let newWidth = e.clientX;
+            if (newWidth >= 200 && newWidth <= 400) {
+                sidebar.style.width = newWidth + 'px';
+            }
+        }
+
+        function stopResize() {
+            document.removeEventListener('mousemove', resize);
+            document.removeEventListener('mouseup', stopResize);
+        }
+
+        uploadbtn.addEventListener('click', ()=> {
+            window.location.href = '{{ url_for("upload") }}'
+        })
+
+
+    </script>
+</body>
+</html>

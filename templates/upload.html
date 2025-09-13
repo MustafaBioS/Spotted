@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Song</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+</head>
+<body>
+    <div class="container-fluid">
+    <div class="center">
+        <div class="bg uploadbg">
+            <h1 class="uploadtitle">Upload Your Music</h1>
+            <form action="{{ url_for('upload')}}" method="post" class="uploadform container-fluid" enctype="multipart/form-data">
+                <input type="text" class="inpsongname songname" name='songname' placeholder="Song Name" required>
+                <input type="file" id="songUpload" accept=".mp3,audio/mpeg" name="audiofile" required>
+                <input type="submit" class="bgsubmit filesubmit" value="Upload Song">
+
+                <select class="selectbar" required name="genre">
+                    <option value="" disabled selected>Choose Genre</option>
+                    <option>Rock</option>
+                    <option>Pop</option>
+                    <option>Hip Hop</option>
+                    <option>Jazz</option>
+                    <option>Classical</option>
+                    <option>Metal</option>
+                    <option>Country</option>
+                    <option>Other</option>
+                </select>
+
+                <div class="centerlabel">
+                    <label for='songUpload' class="labelbtn">Choose File</label>
+                    <p class="upfilename">No File Chosen</p>
+                </div>
+
+            </form>
+            
+
+        </div>
+    </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script>
+        const hiddenupload = document.querySelector('#songUpload')
+
+        document.addEventListener('DOMContentLoaded', ()=> {
+            hiddenupload.addEventListener('change', function() {
+                const fileName = this.files[0] ? this.files[0].name : "No file chosen";
+                  document.querySelector(".upfilename").textContent = fileName;
+            })
+        })
+
+    </script>
+</body>
+</html>
