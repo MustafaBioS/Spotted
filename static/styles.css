@@ -15,10 +15,13 @@ body {
 }
 
 .center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 98vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  gap: 24px;
+  box-sizing: border-box;
+  padding: 20px;
 }
 
 .bg {
@@ -654,12 +657,15 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
+    gap: 250px;
 }
 
 .settingsbg {
+    flex: 1 1 auto;
     height: 650px;
-    width: 900px;
-    max-width: 75%;
+    max-width: 900px;
+    width: 100%;
+    margin-right: 100px;
     background-color: black;
     border-radius: 40px;
     box-shadow: 0 0 15px rgba(0,255,0,0.5);
@@ -668,12 +674,14 @@ body {
 
 .left {
     display: flex;
+    flex: 0 1 180px;
+    min-width: 20px;
     align-items: center;
     height: 100%;
-    transform: translateX(-250px);
     justify-content: center;
     flex-direction: column;
     gap: 50px;
+    margin-right: 10px;
 }
 
 .settingbtn {
@@ -684,6 +692,8 @@ body {
     outline: none;
     border: none;
     transition: all 0.3s ease;
+    flex: 0 0 55px;
+    min-width: 120px;
 }
 
 .settingbtn:hover {
@@ -924,4 +934,31 @@ body {
 
 .deletebtn:hover {
     background-color: rgb(87, 10, 10);
+}
+
+@media (max-width: 991px) {
+  .centered {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .left {
+    order: 2;
+    width: 100%;
+    transform: none;
+    margin-top: 75px;
+    margin-bottom: 75px;
+    flex: 0 1 180px;
+    min-width: 20px;
+  }
+
+  .settingsbg {
+    order: 1;
+    margin-top: 50px;
+    margin-right: 0;
+  }
+
+
+  .searchbar { max-width: 100%; }
 }

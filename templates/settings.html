@@ -70,7 +70,7 @@
                     </div>
                     <form class="settingsform" action="{{ url_for('settings', user_id=current_user.id) }}" method="post">
                         <input type="text" class="settingstext form-control" placeholder="Change Username" name="newuser" required>
-                        <input type="text" class="settingstext passtext form-control" placeholder="Password" name="passverify" required>>
+                        <input type="text" class="settingstext passtext form-control" placeholder="Password" name="passverify" required>
                         <input type="submit" class="settingssubmit" value="Change Profile"> 
                     </form> 
 
@@ -86,7 +86,7 @@
                     </div>
                     <form class="settingsform" action="{{ url_for('settings', user_id=current_user.id) }}" method="post">
                         <input type="password" class="settingstext form-control" placeholder="New Password" name="newpass" required>
-                        <input type="password" class="settingstext passtext form-control" placeholder="Old Password" name="oldpass" required>>
+                        <input type="password" class="settingstext passtext form-control" placeholder="Old Password" name="oldpass" required>
                         <input type="submit" class="settingssubmit" value="Change Password"> 
                     </form> 
                 </div>
