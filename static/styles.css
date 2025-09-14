@@ -156,10 +156,12 @@ body {
     height: 65px;
     max-height: 65px;
     z-index: 3;
+    transition: all 0.3s ease;
 }
 
 .pfp:hover {
     cursor: pointer;
+    opacity: 0.5;
 }
 
 .searchbar {
@@ -662,4 +664,264 @@ body {
     border-radius: 40px;
     box-shadow: 0 0 15px rgba(0,255,0,0.5);
     animation: borderanimation 2s linear infinite;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    transform: translateX(-250px);
+    justify-content: center;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.settingbtn {
+    height: 50px;
+    width: 150px;
+    border-radius: 30px;
+    font-size: 25px;
+    outline: none;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.settingbtn:hover {
+    transform: translateY(-8px);
+    background-color: green;
+    box-shadow: 0px 2px 15px rgba(255,255,255,0.7);
+    color: white;
+    cursor: pointer;
+}
+
+.profile {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.nameimg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+}
+
+.settingsname {
+    margin: 10px;
+    color: white;
+}
+
+.settingspfp {
+    border-radius: 50%;
+    margin-right: 75px;
+    min-height: 35px;
+    height: 90px;
+    max-height: 100px;
+    z-index: 3;
+    margin: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.settingspfp:hover {
+    opacity: 0.5;
+}
+
+.settingsform {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.accountform {
+    flex-direction: row;
+    gap: 25px;
+}
+
+.settingstext {
+    height: 35px;
+    max-width: 225px;
+    outline: none;
+    border: none;
+    margin-top: 75px;
+    border-radius: 30px;
+    padding-left: 25px;
+    transition: all 0.3s ease;
+}
+
+.settingstext::placeholder {
+    color: black;
+}
+
+.settingstext:focus {
+    transform: translateY(-8px);
+    background-color: green;
+    box-shadow: 0px 2px 15px rgba(255,255,255,0.7);
+    color: white;
+}
+
+.settingstext:focus::placeholder {
+    color: white;
+}
+
+.settingslabelbtn {
+    background-color: white;
+    width: 7rem;
+    text-align: center;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    font-size: 18px;
+    outline: none;
+    transition: all 0.3s ease;
+    z-index: 3;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    margin-left: 45px;
+}
+
+.settingslabelbtn:hover {
+    transform: translateY(-8px);
+    background-color: green;
+    box-shadow: 0px 2px 15px rgba(255,255,255,0.7);
+    color: white;
+    cursor: pointer;
+}
+
+.settingsfilename {
+    color: white;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.settingssubmit {
+    background-color: white;
+    width: 10rem;
+    text-align: center;
+    height: 2.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    font-size: 18px;
+    outline: none;
+    transition: all 0.3s ease;
+    z-index: 3;
+    outline: none;
+    border: none;
+    margin-top: 25px;
+}
+
+.settingssubmit:hover {
+    transform: translateY(-8px);
+    background-color: green;
+    box-shadow: 0px 2px 15px rgba(255,255,255,0.7);
+    color: white;
+    cursor: pointer;   
+}
+
+.passtext {
+    margin-top: 30px;
+}
+
+.security {
+    display: none;
+}
+
+.account {
+    display: none;
+}
+
+.chosen {
+    background-color: green;
+    color: white;
+}
+
+.securitydiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.securitytitle {
+    color: white;
+    font-size: 50px;
+    margin-top: 100px;
+    text-align: center;
+}
+
+.logout {
+    margin-top: 150px;
+    font-size: 20px;
+}
+
+.delete {
+    margin-top: 150px;
+}
+
+.delete:hover {
+    background-color: rgb(87, 10, 10);
+}
+
+.modaloverlay {
+    align-items: center;
+    justify-content: center;
+    height: 150%;
+    width: 100%;
+    z-index: 5090;
+    position: fixed;
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.3);
+    display: none;
+}
+
+.modall {
+    height: 500px;
+    width: 750px;
+    background-color: #121212;
+    z-index: 5090;
+    position: fixed;
+    border-radius: 30px;
+}
+
+.modaltitle {
+    color: white;
+    text-align: center;
+    margin-top: 75px;
+    font-size: 40px;
+    color: rgb(153, 54, 54);
+}
+
+.deleteform {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.deletebtn {
+    margin-top: 50px;
+}
+
+.deleteinp:focus {
+    background-color: rgb(87, 10, 10);
+}
+
+.deletebtn:hover {
+    background-color: rgb(87, 10, 10);
 }

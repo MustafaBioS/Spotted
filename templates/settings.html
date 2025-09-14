@@ -54,11 +54,67 @@
     </nav>
 
     <div class="layout container-fluid">
-        <div class="centered">
-            <div class="settingsbg">
 
+        <div class="centered container-fluid">
+            <div class="left">
+                <button class="settingbtn profilebtn chosen">Profile</button>
+                <button class="settingbtn securitybtn">Security</button>
+                <button class="settingbtn accountbtn">Account</button>
+            </div>
+
+            <div class="settingsbg">
+                <div class="profile container-fluid">
+                    <div class="nameimg">
+                        <img src="/{{ current_user.pfp }}" alt="PFP" class="settingspfp">
+                        <h1 class="settingsname">{{ current_user.username}}</h1>
+                    </div>
+                    <form class="settingsform" action="{{ url_for('settings', user_id=current_user.id) }}" method="post">
+                        <input type="text" class="settingstext form-control" placeholder="Change Username" name="newuser" required>
+                        <input type="text" class="settingstext passtext form-control" placeholder="Password" name="passverify" required>>
+                        <input type="submit" class="settingssubmit" value="Change Profile"> 
+                    </form> 
+
+                    <form class="setpfpform" action="{{ url_for('settings', user_id=current_user.id) }}" method="post" enctype="multipart/form-data">
+                        <input type="file" id="change" accept="image/*" name="audiofile" hidden required>
+                    </form>
+
+                </div>
+                <div class="security">
+                    <div class="profile container-fluid">
+                    <div class="securitydiv">
+                        <h1 class="securitytitle">Password Change</h1>
+                    </div>
+                    <form class="settingsform" action="{{ url_for('settings', user_id=current_user.id) }}" method="post">
+                        <input type="password" class="settingstext form-control" placeholder="New Password" name="newpass" required>
+                        <input type="password" class="settingstext passtext form-control" placeholder="Old Password" name="oldpass" required>>
+                        <input type="submit" class="settingssubmit" value="Change Password"> 
+                    </form> 
+                </div>
+                </div>
+                <div class="account">
+                    <div class="profile container-fluid">
+                    <div class="securitydiv">
+                        <h1 class="securitytitle">Account</h1>
+                    </div>
+                    <div class="settingsform accountform">
+                        <input type="submit" class="settingssubmit logout" value="Logout" name="logout"> 
+                        <button class="settingssubmit delete">Delete Account</button> 
+                    </div> 
+                </div>
+            </div>
+            
+        </div>
+        <div class="modaloverlay container-fluid">
+            <div class="modall container-fluid">
+                <h1 class="modaltitle">Delete Account</h1>
+                    <form class="deleteform" action="{{ url_for('settings', user_id=current_user.id) }}" method="post">
+                        <input type="password" class="settingstext deleteinp form-control" placeholder="Password" name="deletepass" required>
+                        <input type="password" class="settingstext deleteinp passtext form-control" placeholder="Confirm Password" name="confirmpass" required>
+                        <input type="submit" class="settingssubmit deletebtn" value="Delete Account"> 
+                    </form> 
             </div>
         </div>
+
     </div>    
 
 
@@ -71,7 +127,88 @@
         const genrebox = document.querySelectorAll('.grid-item')
         const home = document.querySelector('.homeicon');
         const pfp = document.querySelector('.pfp');
+        const hiddenupload = document.querySelector('#change');
+        const settingspfp = document.querySelector('.settingspfp');
+        const pfpform = document.querySelector('.setpfpform');
+        const logout = document.querySelector('.logout');
 
+        const profilebtn = document.querySelector('.profilebtn');
+        const securitybtn = document.querySelector('.securitybtn');
+        const accountbtn = document.querySelector('.accountbtn');
+
+        const profile = document.querySelector('.profile');
+        const security = document.querySelector('.security');
+        const account = document.querySelector('.account');
+        const modal = document.querySelector(".modaloverlay");
+        const deletebtn = document.querySelector('.delete');
+
+        deletebtn.addEventListener('click', ()=> {
+            modal.style.display = 'flex';
+        })
+
+        document.addEventListener("click", (event) => {
+
+        if (modal.style.display === "flex") {
+
+            if (event.target === modal) {
+            modal.style.display = "none";
+            }
+        }
+        });
+
+
+        logout.addEventListener('click', ()=> {
+            window.location.href = "{{ url_for('logout') }}"
+        })
+
+        profilebtn.addEventListener('click', ()=> {
+            profile.style.display = 'flex';
+            security.style.display = 'none';
+            account.style.display = 'none';
+
+            profilebtn.classList.add('chosen');
+            securitybtn.classList.remove('chosen');
+            accountbtn.classList.remove('chosen');
+
+        })
+
+        securitybtn.addEventListener('click', ()=> {
+            profile.style.display = 'none';
+            security.style.display = 'flex';
+            account.style.display = 'none';
+
+            profilebtn.classList.remove('chosen');
+            securitybtn.classList.add('chosen');
+            accountbtn.classList.remove('chosen');
+        })
+
+        accountbtn.addEventListener('click', ()=> {
+            profile.style.display = 'none';
+            security.style.display = 'none';
+            account.style.display = 'flex';
+
+            profilebtn.classList.remove('chosen');
+            securitybtn.classList.remove('chosen');
+            accountbtn.classList.add('chosen');
+        })
+
+        settingspfp.addEventListener('click', ()=> {
+            hiddenupload.click();
+        })
+
+        hiddenupload.addEventListener('change', ()=>{
+            if (hiddenupload.files.length > 0) {
+                pfpform.submit();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', ()=> {
+            hiddenupload.addEventListener('change', function() {
+                const fileName = this.files[0] ? this.files[0].name : "No file chosen";
+                  document.querySelector(".settingsfilename").textContent = fileName;
+            })
+        })
+        
         pfp.addEventListener('click', ()=> {
             window.location.href = "{{ url_for('settings', user_id=current_user.id)}}"
         })        
