@@ -81,8 +81,13 @@
         const resizer = document.querySelector('.resizer')
         const genrebox = document.querySelectorAll('.grid-item')
         const home = document.querySelector('.homeicon');
+        const pfp = document.querySelector('.pfp');
         let touchStartX = 0;
         let touchEndX = 0;
+
+        pfp.addEventListener('click', ()=> {
+            window.location.href = "{{ url_for('settings', user_id=current_user.id)}}"
+        })        
 
         home.addEventListener('click', ()=> {
             window.location.href = "{{ url_for('home') }}"

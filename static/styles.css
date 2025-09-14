@@ -32,13 +32,6 @@ body {
 }
 
 
-/* 
-@media (max-width: 340px) {
-    .signbg {
-        display: none;
-    }
-} */
-
 @keyframes borderanimation {
   0%   { box-shadow: 0 -5px 15px rgba(0,255,0,0.5); }
   25%  { box-shadow: 5px 0 15px rgba(0,255,0,0.5); }
@@ -278,7 +271,6 @@ body {
 }
 
 .uploadbg {
-
     width: clamp(40%,1000px, 95%);
 }
 
@@ -409,7 +401,6 @@ body {
   color: white;
   font-size: 30px;
   margin: 0;
-  padding-top: 6px;
 }
 
 .createplaylist {
@@ -656,3 +647,19 @@ body {
     cursor: pointer;
 }
 
+.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.settingsbg {
+    height: 650px;
+    width: 900px;
+    max-width: 75%;
+    background-color: black;
+    border-radius: 40px;
+    box-shadow: 0 0 15px rgba(0,255,0,0.5);
+    animation: borderanimation 2s linear infinite;
+}

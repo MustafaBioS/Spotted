@@ -140,7 +140,7 @@ def genre(genre):
 def settings(user_id):
     user_id = current_user.id
     if request.method == 'GET':
-        return render_template('settings.html')
+        return render_template('settings.html', user_id=user_id)
 
 
 # RUN

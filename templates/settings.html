@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+    
+</head>
+<body style="overflow-x: hidden;">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flashCon">
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <nav class="nvb navbar navbar-expand-lg navbar-toggler navbar-dark" style="position: relative;">
+        <div class="container-fluid">
+            {% if current_user.is_artist %}
+                <button class="navbar-toggler" type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#navbarContent" 
+                    aria-controls="navbarContent" 
+                    aria-expanded="false" 
+                    aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            
+        <div class=" nvb navbar navbar-expand-md container-fluid collapse navbar-collapse" id="navbarContent">
+            <div class="leftnvb">
+                <button class="upload navbar-brand">Upload Song</button>
+            </div>
+
+            <div class="middlenvb">
+                <img src="../static/home--v3.png" class="homeicon">
+                <input class="searchbar" type="search" name="search" placeholder="Search">
+            </div>
+
+            <div class="rightnvb">
+                <img src="/{{ current_user.pfp }}" class="pfp" alt="Profile Picture">
+            </div>
+            {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout container-fluid">
+        <div class="centered">
+            <div class="settingsbg">
+
+            </div>
+        </div>
+    </div>    
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script>
+        const uploadbtn = document.querySelector('.upload')
+        const sidebar = document.querySelector('.sidebar')
+        const resizer = document.querySelector('.resizer')
+        const genrebox = document.querySelectorAll('.grid-item')
+        const home = document.querySelector('.homeicon');
+        const pfp = document.querySelector('.pfp');
+
+        pfp.addEventListener('click', ()=> {
+            window.location.href = "{{ url_for('settings', user_id=current_user.id)}}"
+        })        
+
+        home.addEventListener('click', ()=> {
+            window.location.href = "{{ url_for('home') }}"
+        })
+
+        uploadbtn.addEventListener('click', ()=> {
+            window.location.href = '{{ url_for("upload") }}'
+        })
+
+
+    </script>
+</body>
+</html>
