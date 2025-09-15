@@ -60,7 +60,7 @@ class Playlists(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('Users', backref='playlists')
     
-    plsongs = db.Column('Songs', secondary=playlist_songs, backref='playlists')
+    plsongs = db.relationship('Songs', secondary=playlist_songs, backref='playlists')
 
 
 # ROUTES
@@ -124,6 +124,7 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/upload', methods=['GET', 'POST'])
+@login_required
 def upload():
     if request.method == 'GET':
         return render_template('upload.html')
@@ -219,6 +220,7 @@ def settings(user_id):
             return redirect(url_for('settings', user_id=user_id))        
 
 @app.route('/delete/<int:user_id>', methods=['POST'])
+@login_required
 def delete(user_id):
 
     if request.method == 'POST':
@@ -246,12 +248,33 @@ def delete(user_id):
             return redirect(url_for('settings', user_id=user_id))
 
 @app.route('/createplaylist', methods=['GET', 'POST'])
+@login_required
 def create():
     if request.method == 'GET':
-        return render_template('create.html')
+        playlists = Playlists.query.filter_by(user_id=current_user.id).all()
+        return render_template('create.html', playlists=playlists)
     if request.method == 'POST':
-        pass
+        plname = request.form.get('plname')
+        plpfp = request.files.get('newpfp')
+
+        plpic_path = "/static/playlistpics/defaultpl.png"
+        if plpfp and plpfp.filename != '':
+            upload_folder = os.path.join('static', 'playlistpics')
+            os.makedirs(upload_folder, exist_ok=True)
+
+            filename = plpfp.filename
+            filepath = os.path.join(upload_folder, filename)
+            plpfp.save(filepath)
     
+            plpic_path = f"/static/playlistpics/{filename}"
+
+        playlist = Playlists(playlistname=plname, playlistpic=plpic_path, user_id=current_user.id)
+
+        db.session.add(playlist)
+        db.session.commit()
+        flash('Playlist Created Successfully', 'success')
+        return redirect(url_for('create'))
+
 # RUN
 
 if __name__ == '__main__':
