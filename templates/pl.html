@@ -45,10 +45,26 @@
         <div class="resizer"></div>
         <h1 class="library">Your Library</h1>
         <button class="createplaylist">Create Playlist</button>
+        {% for playlist in playlists %}
+        <img src="{{ playlist.playlistpic }}" class="asidepic" title="{{ playlist.playlistname }}" data-id="{{ playlist.id }}">
+        {% endfor %}
     </aside>
+
+    <main class="content container-fluid">
+        <div class="top container-fluid">
+            <img src="{{ playlist.playlistpic}}" class="playlistpfp">
+            <div class="namespl">
+                <h1 class="playlisttitle">{{ playlist.playlistname }}</h1>
+                <div class="rowpl">
+                    <img src="{{ playlist.user.pfp }}" class="pfp plpfp">
+                    <p class="playlistauthor">{{ playlist.user.username }}</p>
+                </div>
+            </div>
+        </div>
 
         <ol class="orderedl">
         {% for song in songs %}
+            <li class="song-row">
                 <span class="listnum">{{ loop.index }}</span>
                 <div class="audioCon">
                     <button class="controlbtn">▶</button>
@@ -57,11 +73,12 @@
                         <h1 class="songname">{{ song.songname }}</h1>
                         <p class="pname">{{ song.artist.username }}</p>
                     </div>
-
                     <audio src="{{ song.audiofile }}" class="audiobar" hidden></audio>
                 </div>
+            </li>
         {% endfor %}
         </ol>
+    </main>
 </div>
 
 
@@ -76,8 +93,13 @@
         const durationtext = document.querySelector('.durationtext');
         const home = document.querySelector('.homeicon');
         const pfp = document.querySelector('.pfp');
+        const playlistpfp = document.querySelector('.playlistpfp')
         let touchStartX = 0;
         let touchEndX = 0;
+
+            // playlistpfp.addEventListener {
+
+            // }
 
             pfp.addEventListener('click', ()=> {
                 window.location.href = "{{ url_for('settings', user_id=current_user.id)}}"

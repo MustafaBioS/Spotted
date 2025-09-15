@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genre</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+</head>
+<body style="overflow-x : hidden;">
+
+    <nav class="nvb navbar navbar-expand-lg navbar-toggler navbar-dark">
+        <div class="container-fluid">
+            {% if current_user.is_artist %}
+                <button class="navbar-toggler" type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#navbarContent" 
+                    aria-controls="navbarContent" 
+                    aria-expanded="false" 
+                    aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            
+        <div class=" nvb navbar navbar-expand-md container-fluid collapse navbar-collapse" id="navbarContent">
+            <div class="leftnvb">
+                <button class="upload navbar-brand">Upload Song</button>
+            </div>
+
+            <div class="middlenvb">
+                <img src="../static/home--v3.png" class="homeicon">
+                <input class="searchbar" type="search" name="search" placeholder="Search">
+            </div>
+
+            <div class="rightnvb">
+                <img src="{{ current_user.pfp }}" class="pfp" alt="Profile Picture">
+            </div>
+            {% endif %}
+            </div>
+        </div>
+    </nav>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="resizer"></div>
+        <h1 class="library">Your Library</h1>
+        <button class="createplaylist">Create Playlist</button>
+        {% for playlist in playlists %}
+        <img src="{{ playlist.playlistpic }}" class="asidepic" title="{{ playlist.playlistname }}" data-id="{{ playlist.id }}">
+        {% endfor %}
+    </aside>
+
+        <ol class="orderedl">
+        {% for song in songs %}
+                <span class="listnum">{{ loop.index }}</span>
+                <div class="audioCon">
+                    <button class="controlbtn">▶</button>
+                    <img src="/{{ song.artist.pfp }}" alt="Publisher's PFP" class="ppfp">
+                    <div class="names">
+                        <h1 class="songname">{{ song.songname }}</h1>
+                        <p class="pname">{{ song.artist.username }}</p>
+                    </div>
+                    <div class="addbtncon">
+                        <select onchange="window.location.href=this.value">
+                            <option disabled selected>Add to playlist</option>
+                            {% for playlist in playlists %}
+                                <option value="{{ url_for('add', playlist_id=playlist.id, song_id=song.id) }}">
+                                    {{ playlist.playlistname }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <audio src="{{ song.audiofile }}" class="audiobar" hidden></audio>
+                </div>
+        {% endfor %}
+        </ol>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script>
+        const uploadbtn = document.querySelector('.upload');
+        const sidebar = document.querySelector('.sidebar');
+        const resizer = document.querySelector('.resizer');
+        const genrebox = document.querySelectorAll('.grid-item');
+        const controlbtn = document.querySelectorAll('.controlbtn');
+        const audio = document.querySelectorAll('.audiobar');
+        const durationtext = document.querySelector('.durationtext');
+        const home = document.querySelector('.homeicon');
+        const pfp = document.querySelector('.pfp');
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const addbnt = document.querySelector('.addbtn');
+
+            pfp.addEventListener('click', ()=> {
+                window.location.href = "{{ url_for('settings', user_id=current_user.id)}}"
+            })        
+
+
+            home.addEventListener('click', ()=> {
+                window.location.href = "{{ url_for('home') }}"
+            })
+
+
+            document.addEventListener("touchstart", function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            }, false);
+
+            document.addEventListener("touchend", function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+            }, false);
+
+            function handleSwipe() {
+            const sidebar = document.querySelector(".sidebar");
+
+            if (touchEndX > touchStartX + 50) {
+                sidebar.classList.add("active");
+            }
+
+            if (touchEndX < touchStartX - 50) {
+                sidebar.classList.remove("active");
+            }
+            }
+
+
+            function pause() {
+                audio.forEach(a => {
+                    a.pause();
+                    a.currentTime = 0;
+                });
+                controlbtn.forEach(btn => btn.textContent = "▶")
+            }
+
+            controlbtn.forEach((btn, index)=> {
+                const aud = audio[index];
+                
+                btn.addEventListener('click', ()=> {
+                    if (aud.paused) {
+                        pause()
+                        aud.play();
+                        btn.textContent = '❚❚';
+                    } else {
+                        aud.pause();
+                        aud.currentTime = aud.currentTime
+                        btn.textContent = '▶';
+                    };
+
+            })
+        })
+
+            genrebox.forEach(box => {
+                box.addEventListener('click', ()=> {
+                    const genre = box.dataset.genre;
+                    window.location.href = `/genre/${genre}`;
+                })
+            })
+
+            resizer.addEventListener('mousedown', function () {
+                document.addEventListener('mousemove', resize);
+                document.addEventListener('mouseup', stopResize);
+            })
+
+            function resize(e) {
+                let newWidth = e.clientX;
+                if (newWidth >= 200 && newWidth <= 400) {
+                    sidebar.style.width = newWidth + 'px';
+                }
+            }
+
+            function stopResize() {
+                document.removeEventListener('mousemove', resize);
+                document.removeEventListener('mouseup', stopResize);
+            }
+
+            uploadbtn.addEventListener('click', ()=> {
+                window.location.href = '{{ url_for("upload") }}'
+            })
+
+
+
+    </script>
+</body>
+</html>

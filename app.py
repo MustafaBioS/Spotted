@@ -60,7 +60,7 @@ class Playlists(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('Users', backref='playlists')
     
-    plsongs = db.relationship('Songs', secondary=playlist_songs, backref='playlists')
+    songs = db.relationship('Songs', secondary=playlist_songs, backref='playlists')
 
 
 # ROUTES
@@ -72,8 +72,9 @@ def load_user(user_id):
 @app.route('/home')
 @login_required
 def home():
+    playlists = Playlists.query.filter_by(user_id=current_user.id).all()
     songs = Songs.query.all()
-    return render_template('index.html', songs=songs)
+    return render_template('index.html', songs=songs, playlists=playlists)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -150,8 +151,9 @@ def upload():
 @app.route('/genre/<genre>')
 @login_required
 def genre(genre):
+    playlists = Playlists.query.filter_by(user_id=current_user.id).all()
     songs = Songs.query.options(joinedload(Songs.artist)).filter_by(genre=genre).all()
-    return render_template('playlist.html', genre=genre, songs=songs)
+    return render_template('genre.html', genre=genre,   songs=songs, playlists=playlists)
 
 
 @app.route('/settings/<int:user_id>', methods=['GET', 'POST'])
@@ -273,7 +275,28 @@ def create():
         db.session.add(playlist)
         db.session.commit()
         flash('Playlist Created Successfully', 'success')
-        return redirect(url_for('create'))
+        return redirect(url_for('home'))
+
+@app.route('/Playlist/<int:playlist_id>')
+@login_required
+def playlist(playlist_id):
+    playlists = Playlists.query.filter_by(user_id=current_user.id).all()
+    playlist = Playlists.query.get_or_404(playlist_id)
+    return render_template('pl.html', playlist=playlist, songs=playlist.songs, playlists=playlists)
+
+@app.route('/playlist/<int:playlist_id>/add/<int:song_id>')
+def add(playlist_id, song_id):
+    playlist = Playlists.query.get_or_404(playlist_id)
+    song = Songs.query.get_or_404(song_id)
+
+    if song not in playlist.songs:
+        playlist.songs.append(song)
+        db.session.commit()
+        flash('Song Added To Playlist Successfully', 'success')
+        return redirect(url_for('playlist', playlist_id=playlist.id))
+    else:
+        flash('Song Already In Playlist', 'fail')
+        return redirect(url_for('playlist', playlist_id=playlist.id))
 
 # RUN
 

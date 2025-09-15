@@ -58,6 +58,9 @@
         <div class="resizer"></div>
         <h1 class="library">Your Library</h1>
         <button class="createplaylist">Create Playlist</button>
+        {% for playlist in playlists %}
+        <img src="{{ playlist.playlistpic }}" class="asidepic" title="{{ playlist.playlistname }}" data-id="{{ playlist.id }}">
+        {% endfor %}
     </aside>
 
 
@@ -82,8 +85,16 @@
         const genrebox = document.querySelectorAll('.grid-item')
         const home = document.querySelector('.homeicon');
         const pfp = document.querySelector('.pfp');
+        const plpfp = document.querySelector('.asidepic');
         let touchStartX = 0;
         let touchEndX = 0;
+
+        document.querySelectorAll('.asidepic').forEach(img => {
+            img.addEventListener('click', () => {
+                const id = img.dataset.id;
+                window.location.href = `/Playlist/${id}`;
+            });
+        });
 
         pfp.addEventListener('click', ()=> {
             window.location.href = "{{ url_for('settings', user_id=current_user.id)}}"

@@ -584,15 +584,8 @@ body {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    margin-top: 125px;
 }
 
-.listnum {
-    color: white;
-    font-size: 25px;
-    transform: translateY(65px);
-    margin-left: -20px;
-}
 
 .ppfp {
     height: 40px;
@@ -1003,4 +996,91 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
 
+}
+
+.asidepic {
+    height: 75px;
+    margin-top: 30px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.asidepic:hover {
+    cursor: pointer;
+    transform: translateY(-6px);
+    opacity: 0.5;
+}
+
+.top {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+
+.playlistpfp {
+    height: 200px;
+    border-radius: 30px;
+}
+
+.namespl {
+    color: white;
+    margin-left: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.rowpl {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.playlistauthor {
+    text-align: center;
+    margin-top: 15px;
+    margin-left: 10px;
+}
+
+.plpfp {
+    height: 5px;
+    margin: 0;
+}
+
+.addbtncon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    width: 100%;
+}
+
+.addbtn {
+    background: transparent;
+    outline: none;
+    border: none;
+    font-size: 50px;
+    color: white;
+}
+
+.content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 150px 30px 30px;
+}
+
+.song-row {
+    width: 100%;
+}
+
+.listnum {
+    display: inline-block;
+    width: 40px;
+    text-align: center;
+    color: white;
+    font-size: 30px;
+    transform: translate(-25px, 65px);
 }
