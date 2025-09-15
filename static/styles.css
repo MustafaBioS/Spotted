@@ -458,7 +458,7 @@ body {
     margin-top: 100px;
 }
 
-@media (max-width: 755px) {
+@media (max-width: 1200px) {
     .sidebar {
         position: fixed;
         top: 0;
@@ -681,6 +681,7 @@ body {
     border-radius: 40px;
     box-shadow: 0 0 15px rgba(0,255,0,0.5);
     animation: borderanimation 2s linear infinite;
+    margin-top: 150px;
 }
 
 .left {
@@ -968,7 +969,7 @@ body {
 
   .settingsbg {
     order: 1;
-    margin-top: 50px;
+    margin-top: 150px;
     margin-right: 0;
   }
 
@@ -1231,7 +1232,7 @@ body {
     }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1090px) {
   .navbar-nav {
     text-align: center;
   }
@@ -1249,4 +1250,27 @@ body {
     color: white;
     text-align: center;
     margin-right: 125px;
+}
+
+.bgmob {
+    background-color: black;
+    border-radius: 30px;
+    height: 250px; 
+    width: 250px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    display: none;
+}
+
+.moblistitem {
+    margin-top: 25px;
+    margin-right: 35px;
+    list-style: none;
+    text-align: center;
+}
+
+.listtext {
+    color: white;
 }

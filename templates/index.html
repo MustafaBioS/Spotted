@@ -22,7 +22,7 @@
         {% endif %}
     {% endwith %}
 
-    <nav class="nvb navbar navbar-expand-lg navbar-toggler navbar-dark">
+    <nav class="nvb navbar navbar-expand-xl navbar-toggler navbar-dark">
         <div class="container-fluid">
 
                 <button class="navbar-toggler" type="button" 
@@ -35,7 +35,7 @@
             </button>
 
             
-        <div class=" nvb navbar navbar-expand-md container-fluid collapse navbar-collapse" id="navbarContent">
+        <div class=" nvb navbar navbar-expand-md collapse navbar-collapse container-fluid">
             <div class="leftnvb">
                 {% if current_user.is_artist %}
                 <button class="upload navbar-brand">Upload Song</button>
@@ -46,7 +46,7 @@
                 <img src="../static/home--v3.png" class="homeicon">
                 <form class="d-flex" action="{{ url_for('search') }}" method="GET">
                     <input class="searchbar me-4" type="search" name="q" placeholder="Search For Songs, Artists, or Genres" aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
+                    <button class="btn btn-outline-light searchbtn" type="submit">Search</button>
                 </form>
             </div>
 
@@ -54,8 +54,25 @@
                 <img src="{{ current_user.pfp }}" class="pfp" alt="Profile Picture">
             </div>
 
+
             </div>
         </div>
+
+        <div class="bgmobcon navbar navbar-expand-md collapse navbar-collapse" id="navbarContent">
+            <div class="bgmob">
+                <ul class="ulmob">
+                    {% if current_user.is_artist %}
+                    <li class="moblistitem">
+                        <a href="{{url_for('upload' ) }}" class="listtext">Upload Song</a>
+                    </li>
+                    {% endif %}
+                    <li class="moblistitem">
+                        <a href="{{ url_for('settings', user_id=current_user.id)}}" class="listtext">Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </nav>
 
 <div class="layout">
@@ -92,8 +109,14 @@
         const pfp = document.querySelector('.pfp');
         const plpfp = document.querySelector('.asidepic');
         const createbtn = document.querySelector('.createplaylist');
+        const nvbtn = document.querySelector('.navbar-toggler');
+        const bgmob = document.querySelector('.bgmob')
         let touchStartX = 0;
         let touchEndX = 0;
+
+        nvbtn.addEventListener('click', ()=> {
+            bgmob.style.display = 'flex';
+        })
 
         document.querySelectorAll('.flash').forEach(flash => {
             setTimeout(() => {
