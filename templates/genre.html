@@ -9,9 +9,21 @@
 </head>
 <body style="overflow-x : hidden;">
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flashCon">
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <nav class="nvb navbar navbar-expand-lg navbar-toggler navbar-dark">
         <div class="container-fluid">
-            {% if current_user.is_artist %}
+
                 <button class="navbar-toggler" type="button" 
                     data-bs-toggle="collapse" 
                     data-bs-target="#navbarContent" 
@@ -24,7 +36,9 @@
             
         <div class=" nvb navbar navbar-expand-md container-fluid collapse navbar-collapse" id="navbarContent">
             <div class="leftnvb">
+                {% if current_user.is_artist %}
                 <button class="upload navbar-brand">Upload Song</button>
+                {% endif %}
             </div>
 
             <div class="middlenvb">
@@ -35,7 +49,7 @@
             <div class="rightnvb">
                 <img src="{{ current_user.pfp }}" class="pfp" alt="Profile Picture">
             </div>
-            {% endif %}
+
             </div>
         </div>
     </nav>
@@ -55,13 +69,13 @@
                 <span class="listnum">{{ loop.index }}</span>
                 <div class="audioCon">
                     <button class="controlbtn">▶</button>
-                    <img src="/{{ song.artist.pfp }}" alt="Publisher's PFP" class="ppfp">
+                    <img src="{{ song.artist.pfp }}" alt="Publisher's PFP" class="ppfp">
                     <div class="names">
-                        <h1 class="songname">{{ song.songname }}</h1>
+                        <h1 class="textsongname">{{ song.songname }}</h1>
                         <p class="pname">{{ song.artist.username }}</p>
                     </div>
                     <div class="addbtncon">
-                        <select onchange="window.location.href=this.value">
+                        <select onchange="window.location.href=this.value" class="selectbtn">
                             <option disabled selected>Add to playlist</option>
                             {% for playlist in playlists %}
                                 <option value="{{ url_for('add', playlist_id=playlist.id, song_id=song.id) }}">
@@ -92,7 +106,30 @@
         let touchStartX = 0;
         let touchEndX = 0;
         const addbnt = document.querySelector('.addbtn');
+        const createbtn = document.querySelector('.createplaylist');
 
+
+        document.querySelectorAll('.flash').forEach(flash => {
+            setTimeout(() => {
+                flash.style.transition = "all 0.5s ease";
+                flash.style.opacity = 0;
+                flash.style.transform = "translateY(50px)";
+                setTimeout(() => flash.remove(), 500);
+            }, 3000);
+        });
+
+        document.querySelectorAll('.asidepic').forEach(img => {
+            img.addEventListener('click', () => {
+                const id = img.dataset.id;
+                window.location.href = `/Playlist/${id}`;
+            });
+        });
+
+        createbtn.addEventListener('click', ()=> {
+            window.location.href = "{{ url_for('create')}}"
+        })
+
+        
             pfp.addEventListener('click', ()=> {
                 window.location.href = "{{ url_for('settings', user_id=current_user.id)}}"
             })        

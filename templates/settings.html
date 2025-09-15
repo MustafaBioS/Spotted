@@ -142,6 +142,15 @@
         const modal = document.querySelector(".modaloverlay");
         const deletebtn = document.querySelector('.delete');
 
+        document.querySelectorAll('.flash').forEach(flash => {
+            setTimeout(() => {
+                flash.style.transition = "all 0.5s ease";
+                flash.style.opacity = 0;
+                flash.style.transform = "translateY(50px)";
+                setTimeout(() => flash.remove(), 500);
+            }, 3000);
+        });
+
         deletebtn.addEventListener('click', ()=> {
             modal.style.display = 'flex';
         })

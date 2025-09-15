@@ -266,6 +266,15 @@ def create():
 
             filename = plpfp.filename
             filepath = os.path.join(upload_folder, filename)
+
+            img = Image.open(plpfp)
+            max_width, max_height = 512, 512
+
+            if img.width > max_width or img.height > max_height:
+                flash(f'Image Is Too Large, Max Size Is 512 x 512', 'fail')
+                return redirect(url_for('playlist', playlist_id=playlist.id))
+            
+            plpfp.stream.seek(0)
             plpfp.save(filepath)
     
             plpic_path = f"/static/playlistpics/{filename}"
@@ -297,6 +306,58 @@ def add(playlist_id, song_id):
     else:
         flash('Song Already In Playlist', 'fail')
         return redirect(url_for('playlist', playlist_id=playlist.id))
+
+@app.route('/edit/playlist/<int:playlist_id>', methods = ['POST'])
+def edit(playlist_id):
+    newname = request.form.get('newname')
+    newpic = request.files.get('newpfp')
+
+    playlist = Playlists.query.get_or_404(playlist_id)
+
+    if newname:
+        playlist.playlistname = newname
+
+    if newpic and newpic.filename != '':
+
+        upload_folder = os.path.join('static', 'playlistpics')
+        os.makedirs(upload_folder, exist_ok=True)
+
+        filename = newpic.filename
+        filepath = os.path.join(upload_folder, filename)
+
+        img = Image.open(newpic)
+        max_width, max_height = 512, 512
+
+        if img.width > max_width or img.height > max_height:
+            flash(f'Image Is Too Large, Max Size Is 512 x 512', 'fail')
+            return redirect(url_for('playlist', playlist_id=playlist.id))
+        
+        newpic.stream.seek(0)
+        newpic.save(filepath)
+
+        playlist.playlistpic = f"/static/playlistpics/{filename}"
+
+    db.session.commit()
+    flash("Playlist Updated Successfully", 'success')
+    return redirect(url_for('playlist', playlist_id=playlist_id))
+
+@app.route('/search', methods=['GET'])
+@login_required
+def search():
+    query = request.args.get("q", "").strip()
+    playlists = Playlists.query.filter_by(user_id=current_user.id).all()
+
+    results = []
+    if query:
+        results = Songs.query.join(Users).options(joinedload(Songs.artist)) \
+            .filter(
+                (Songs.songname.ilike(f"%{query}%")) |
+                (Songs.genre.ilike(f"%{query}%")) |
+                (Users.username.ilike(f"%{query}%"))
+            ).all()
+
+    return render_template("results.html", query=query, results=results, playlists=playlists)
+
 
 # RUN
 
