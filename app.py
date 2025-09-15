@@ -99,7 +99,7 @@ def signup():
             flash('Username Is Already Taken', 'fail')
             return redirect(url_for('signup'))
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         return render_template('login.html')
