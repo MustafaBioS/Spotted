@@ -6,6 +6,8 @@ from flask_login import UserMixin, login_user, logout_user, LoginManager, curren
 from sqlalchemy import exc
 from sqlalchemy.orm import joinedload
 import os
+from PIL import Image
+import io
 
 # APP INITIALIZATION
 
@@ -30,8 +32,8 @@ class Users(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), nullable=False, unique=True)
-    password = db.Column(db.String(64), nullable=False)
-    pfp = db.Column(db.String(200), default='static/uploads/default.png')
+    password = db.Column(db.Text, nullable=False)
+    pfp = db.Column(db.String(200), default='/static/uploads/default.png')
     is_artist = db.Column(db.Boolean, default=False)
 
 class Songs(db.Model):
@@ -43,6 +45,22 @@ class Songs(db.Model):
 
     artist_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, name="fk_songs_users")
     artist = db.relationship('Users', backref='songs')
+
+playlist_songs = db.Table(
+    'playlist_songs',
+    db.Column('playlist_id', db.Integer, db.ForeignKey('playlists.id'), primary_key=True),
+    db.Column('song_id', db.Integer, db.ForeignKey('songs.id'), primary_key=True)
+)
+
+class Playlists(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    playlistname = db.Column(db.String(64), nullable=False)
+    playlistpic = db.Column(db.String(200), default='/static/playlistpics/defaultpl.png')
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('Users', backref='playlists')
+    
+    plsongs = db.Column('Songs', secondary=playlist_songs, backref='playlists')
 
 
 # ROUTES
@@ -139,10 +157,101 @@ def genre(genre):
 @login_required
 def settings(user_id):
     user_id = current_user.id
+
     if request.method == 'GET':
         return render_template('settings.html', user_id=user_id)
+    if request.method == 'POST':
+        user = Users.query.filter_by(username=current_user.username).first()
 
+        newusername = request.form.get('newuser')
+        userpass = request.form.get('passverify')
 
+        newpfp = request.files.get('newpfp')
+
+        newpass = request.form.get('newpass')
+        oldpass = request.form.get('oldpass')
+
+        if newusername and userpass:
+            if bcrypt.check_password_hash(user.password, userpass):
+                user.username = newusername
+                db.session.commit()
+                flash('Username Updated Successfully', 'success')
+            else:
+                flash('Incorrect Password', 'fail')
+
+            return redirect(url_for('settings', user_id=user_id))
+        
+        if newpfp:
+            if newpfp.filename != '':
+                upload_folder = os.path.join('static', 'uploads')
+                os.makedirs(upload_folder, exist_ok=True)
+
+                filename = newpfp.filename  
+                filepath = os.path.join(upload_folder, filename)
+
+                img = Image.open(newpfp)
+                max_width, max_height = 512, 512
+
+                if img.width > max_width or img.height > max_height:
+                    flash(f'Image Is Too Large, Max Size Is 512 x 512', 'fail')
+                    return redirect(url_for('settings', user_id=user_id))
+                
+                newpfp.stream.seek(0)
+                newpfp.save(filepath)
+
+                user.pfp = f"/static/uploads/{filename}"
+                db.session.commit()
+                flash('Profile Picture Updated Successfully', 'success')
+
+            else:
+                flash('No file selected', 'fail')
+
+            return redirect(url_for('settings', user_id=user_id))
+        
+        if newpass and oldpass:
+            if bcrypt.check_password_hash(user.password, oldpass):
+                user.password = bcrypt.generate_password_hash(newpass).decode('utf-8')
+                db.session.commit()
+                flash('Password Updated Successfully', 'success')
+            else:
+                flash('Incorrect Password', 'fail')
+
+            return redirect(url_for('settings', user_id=user_id))        
+
+@app.route('/delete/<int:user_id>', methods=['POST'])
+def delete(user_id):
+
+    if request.method == 'POST':
+        deletepass = request.form.get('deletepass')
+        confirmpass = request.form.get('confirmpass')
+
+        if user_id != current_user.id:
+            flash("Nice Try Buddy...", 'fail')
+            return redirect(url_for('settings', user_id=user_id))
+        
+        if deletepass != confirmpass:
+            flash('Passwords Do Not Match', 'fail')
+            return redirect(url_for('settings', user_id=user_id))
+
+        user = Users.query.filter_by(id=current_user.id).first()
+        if bcrypt.check_password_hash(user.password, deletepass):
+
+            db.session.delete(user)
+            db.session.commit()
+            logout_user()
+            flash('Account Deleted Successfully', 'success')
+            return redirect(url_for('signup'))
+        else:
+            flash('Incorrect Password', 'fail')
+            return redirect(url_for('settings', user_id=user_id))
+
+@app.route('/createplaylist', methods=['GET', 'POST'])
+def create():
+    if request.method == 'GET':
+        return render_template('create.html')
+    if request.method == 'POST':
+        pass
+    
 # RUN
 
 if __name__ == '__main__':

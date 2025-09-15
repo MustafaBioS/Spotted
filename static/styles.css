@@ -3,6 +3,8 @@ html, body {
     width: 100%;
     margin: 0;
     padding: 0;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 body {
@@ -16,12 +18,10 @@ body {
 
 .center {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
+  height: 100%;
   width: 100%;
-  gap: 24px;
-  box-sizing: border-box;
-  padding: 20px;
 }
 
 .bg {
@@ -159,6 +159,8 @@ body {
     height: 65px;
     max-height: 65px;
     z-index: 3;
+    user-select: none;
+    -webkit-user-drag: none;
     transition: all 0.3s ease;
 }
 
@@ -596,6 +598,8 @@ body {
     height: 40px;
     margin-left: 20px;
     border-radius: 10px;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .controlbtn {
@@ -644,6 +648,8 @@ body {
     border-radius: 33%;
     transition: all 0.3s ease;
     z-index: 500;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .homeicon:hover {
@@ -734,6 +740,8 @@ body {
     margin: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .settingspfp:hover {
@@ -961,4 +969,11 @@ body {
 
 
   .searchbar { max-width: 100%; }
+}
+
+.createtitle {
+    color: white;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 50px;
 }

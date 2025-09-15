@@ -56,66 +56,17 @@
     <div class="layout container-fluid">
 
         <div class="centered container-fluid">
-            <div class="left">
-                <button class="settingbtn profilebtn chosen">Profile</button>
-                <button class="settingbtn securitybtn">Security</button>
-                <button class="settingbtn accountbtn">Account</button>
-            </div>
 
-            <div class="settingsbg">
-                <div class="profile container-fluid">
-                    <div class="nameimg">
-                        <img src="{{ current_user.pfp }}" alt="PFP" class="settingspfp">
-                        <h1 class="settingsname">{{ current_user.username}}</h1>
-                    </div>
-                    <form class="settingsform" action="{{ url_for('settings', user_id=current_user.id) }}" method="post">
-                        <input type="text" class="settingstext form-control" placeholder="Change Username" name="newuser" required>
-                        <input type="password" class="settingstext passtext form-control" placeholder="Password" name="passverify" required>
-                        <input type="submit" class="settingssubmit" value="Change Profile"> 
-                    </form> 
-
-                    <form class="setpfpform" action="{{ url_for('settings', user_id=current_user.id) }}" method="post" enctype="multipart/form-data">
-                        <input type="file" id="change" accept="image/*" name="newpfp" hidden required>
-                    </form>
-
-                </div>
-                <div class="security">
-                    <div class="profile container-fluid">
-                    <div class="securitydiv">
-                        <h1 class="securitytitle">Password Change</h1>
-                    </div>
-                    <form class="settingsform" action="{{ url_for('settings', user_id=current_user.id) }}" method="post">
-                        <input type="password" class="settingstext form-control" placeholder="New Password" name="newpass" required>
-                        <input type="password" class="settingstext passtext form-control" placeholder="Old Password" name="oldpass" required>
-                        <input type="submit" class="settingssubmit" value="Change Password"> 
-                    </form> 
-                </div>
-                </div>
-                <div class="account">
-                    <div class="profile container-fluid">
-                    <div class="securitydiv">
-                        <h1 class="securitytitle">Account</h1>
-                    </div>
-                    <div class="settingsform accountform">
-                        <input type="submit" class="settingssubmit logout" value="Logout" name="logout"> 
-                        <button class="settingssubmit delete">Delete Account</button> 
-                    </div> 
-                </div>
-            </div>
-            
-        </div>
-        <div class="modaloverlay container-fluid">
-            <div class="modall container-fluid">
-                <h1 class="modaltitle">Delete Account</h1>
-                    <form class="deleteform" action="{{ url_for('delete', user_id=current_user.id) }}" method="post">
-                        <input type="password" class="settingstext deleteinp form-control" placeholder="Password" name="deletepass" required>
-                        <input type="password" class="settingstext deleteinp passtext form-control" placeholder="Confirm Password" name="confirmpass" required>
-                        <input type="submit" class="settingssubmit deletebtn" value="Delete Account"> 
-                    </form> 
+            <div class="bg">
+                <h1 class="createtitle">Create Playlist</h1>
+                <img src="{{ playlist.playlistpic }}" class="playlistpic" alt="Playlist Img">
             </div>
         </div>
+    </div>
 
-    </div>    
+
+        </body>
+    </html>
 
 
 
